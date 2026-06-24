@@ -1,0 +1,364 @@
+﻿@model List<DepartmentViewModel>
+@using CurrencyMonitor.Web.ViewModels
+
+<div class="filters">
+    <div class="filter-group">
+        <span class="filter-label">Валюта</span>
+        <button class="currency-btn active" onclick="filterCurrency('ALL')">Все</button>
+        <button class="currency-btn" onclick="filterCurrency('USD')">USD</button>
+        <button class="currency-btn" onclick="filterCurrency('EUR')">EUR</button>
+        <button class="currency-btn" onclick="filterCurrency('RUB')">RUB</button>
+        <button class="currency-btn" onclick="filterCurrency('CNY')">CNY</button>
+        <button class="currency-btn" onclick="filterCurrency('BYN')">BYN</button>
+    </div>
+    <div class="filter-group">
+        <span class="filter-label">Город</span>
+        <select class="city-select" onchange="filterCity(this.value)">
+            <option value="ALL">Все города</option>
+            <option value="Минск">Минск</option>
+            <option value="Брест">Брест</option>
+            <option value="Гомель">Гомель</option>
+            <option value="Гродно">Гродно</option>
+            <option value="Жлобин">Жлобин</option>
+        </select>
+    </div>
+</div>
+
+<div class="search-bar">
+    <i class="ti ti-search"></i>
+    <input type="text" id="searchInput" placeholder="Поиск по названию или адресу..." oninput="filterSearch(this.value)">
+</div>
+
+<div class="legend">
+    <span class="legend-label">Уровень наличия:</span>
+    <div class="legend-item">
+        <svg xmlns='http://www.w3.org/2000/svg' width='23' height='22' viewBox='0 0 23 22' fill='none'><path d='M11.5 12.6875C15.5386 12.6875 18.8125 11.1765 18.8125 9.3125C18.8125 7.44854 15.5386 5.9375 11.5 5.9375C7.46142 5.9375 4.1875 7.44854 4.1875 9.3125C4.1875 11.1765 7.46142 12.6875 11.5 12.6875Z' stroke='#5BA3D9' stroke-width='1.40625' stroke-linecap='round' stroke-linejoin='round' stroke-dasharray='3 2' /><path d='M4.1875 9.3125V12.6875C4.1875 14.375 7 16.0625 11.5 16.0625C16 16.0625 18.8125 14.375 18.8125 12.6875V9.3125' stroke='#5BA3D9' stroke-width='1.40625' stroke-linecap='round' stroke-linejoin='round' stroke-dasharray='3 2' /></svg>
+        Нет валюты
+    </div>
+    <div class="legend-item">
+        <svg xmlns='http://www.w3.org/2000/svg' width='23' height='22' viewBox='0 0 23 22' fill='none'><path d='M11.5 12.6875C15.5386 12.6875 18.8125 11.1765 18.8125 9.3125C18.8125 7.44854 15.5386 5.9375 11.5 5.9375C7.46142 5.9375 4.1875 7.44854 4.1875 9.3125C4.1875 11.1765 7.46142 12.6875 11.5 12.6875Z' stroke='#EE1C25' stroke-width='1.40625' stroke-linecap='round' stroke-linejoin='round' /><path d='M4.1875 9.3125V12.6875C4.1875 14.375 7 16.0625 11.5 16.0625C16 16.0625 18.8125 14.375 18.8125 12.6875V9.3125' stroke='#EE1C25' stroke-width='1.40625' stroke-linecap='round' stroke-linejoin='round' /></svg>
+        Мало валюты
+    </div>
+    <div class="legend-item">
+        <svg xmlns='http://www.w3.org/2000/svg' width='23' height='22' viewBox='0 0 23 22' fill='none'><path d='M8.75 10.3125C12.547 10.3125 15.625 8.92738 15.625 7.21875C15.625 5.51012 12.547 4.125 8.75 4.125C4.95304 4.125 1.875 5.51012 1.875 7.21875C1.875 8.92738 4.95304 10.3125 8.75 10.3125Z' stroke='#F5C70B' stroke-width='1.375' stroke-linecap='round' stroke-linejoin='round' /><path d='M1.875 7.21875V10.6562C1.875 12.3664 4.95156 13.75 8.75 13.75C12.5484 13.75 15.625 12.3664 15.625 10.6562V7.21875' stroke='#F5C70B' stroke-width='1.375' stroke-linecap='round' stroke-linejoin='round' /><path d='M15.625 8.31006C18.7617 8.60225 21.125 9.84834 21.125 11.3437C21.125 13.0538 18.0484 14.4374 14.25 14.4374C12.5656 14.4374 11.0187 14.1624 9.82422 13.7155' stroke='#F5C70B' stroke-width='1.375' stroke-linecap='round' stroke-linejoin='round' /><path d='M7.375 13.6898V14.7812C7.375 16.4914 10.4516 17.875 14.25 17.875C18.0484 17.875 21.125 16.4914 21.125 14.7812V11.3438' stroke='#F5C70B' stroke-width='1.375' stroke-linecap='round' stroke-linejoin='round' /></svg>
+        Достаточно валюты
+    </div>
+    <div class="legend-item">
+        <svg xmlns='http://www.w3.org/2000/svg' width='29' height='22' viewBox='0 0 29 22' fill='none'><path d='M15.6192 10.1361C19.3267 10.1361 22.3322 8.78368 22.3322 7.11532C22.3322 5.44696 19.3267 4.09448 15.6192 4.09448C11.9117 4.09448 8.90625 5.44696 8.90625 7.11532C8.90625 8.78368 11.9117 10.1361 15.6192 10.1361Z' stroke='#A1B925' stroke-width='1.34259' stroke-linecap='round' stroke-linejoin='round' /><path d='M8.90625 7.11523V10.4717C8.90625 12.1416 11.9103 13.4925 15.6192 13.4925C19.3281 13.4925 22.3322 12.1416 22.3322 10.4717V7.11523' stroke='#A1B925' stroke-width='1.34259' stroke-linecap='round' stroke-linejoin='round' /><path d='M22.7285 8.56616C25.7913 8.85146 28.0989 10.0682 28.0989 11.5283C28.0989 13.1981 25.0948 14.5491 21.3859 14.5491C19.7412 14.5491 18.2308 14.2806 17.0645 13.8442' stroke='#A1B925' stroke-width='1.34259' stroke-linecap='round' stroke-linejoin='round' /><path d='M14.6738 13.8191V14.8848C14.6738 16.5547 17.6779 17.9056 21.3868 17.9056C25.0957 17.9056 28.0998 16.5547 28.0998 14.8848V11.5283' stroke='#A1B925' stroke-width='1.34259' stroke-linecap='round' stroke-linejoin='round' /><path d='M8.10163 8.39087C4.39417 8.39087 1.38867 9.74334 1.38867 11.4117C1.38867 13.0801 4.39417 14.4325 8.10163 14.4325C10.126 14.4325 11.9411 14.0293 13.1718 13.3916' stroke='#A1B925' stroke-width='1.34259' stroke-linecap='round' stroke-linejoin='round' /><path d='M1.38867 11.4116V14.7681C1.38867 16.438 4.39272 17.7889 8.10164 17.7889C11.8105 17.7889 14.6731 16.5036 14.6731 14.8338' stroke='#A1B925' stroke-width='1.34259' stroke-linecap='round' stroke-linejoin='round' /></svg>
+        Много валюты
+    </div>
+</div>
+
+<div class="layout">
+    <div class="content" id="departmentList">
+        @foreach (var dept in Model)
+        {
+            <div class="dept-card" data-city="@dept.City" data-id="@dept.Id" data-caption="@dept.Caption" onclick="toggleAnalytics(this)">
+                <div class="dept-caption">@dept.Caption</div>
+                <div class="dept-address">
+                    <i class="ti ti-map-pin"></i> @dept.City, @dept.Addres
+                </div>
+                <div class="currencies" id="currencies-@dept.Id">
+                    <span style="font-size:13px; color:#888;">Загрузка...</span>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="analytics-panel" id="analyticsPanel">
+        <div id="analyticsContent"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const departments = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model));
+        let currentCurrency = 'ALL';
+        let currentCity = 'ALL';
+        let allData = [];
+
+        const coinSvg = {
+            1: `<svg xmlns='http://www.w3.org/2000/svg' width='23' height='22' viewBox='0 0 23 22' fill='none'><path d='M11.5 12.6875C15.5386 12.6875 18.8125 11.1765 18.8125 9.3125C18.8125 7.44854 15.5386 5.9375 11.5 5.9375C7.46142 5.9375 4.1875 7.44854 4.1875 9.3125C4.1875 11.1765 7.46142 12.6875 11.5 12.6875Z' stroke='#5BA3D9' stroke-width='1.40625' stroke-linecap='round' stroke-linejoin='round' stroke-dasharray='3 2'/><path d='M4.1875 9.3125V12.6875C4.1875 14.375 7 16.0625 11.5 16.0625C16 16.0625 18.8125 14.375 18.8125 12.6875V9.3125' stroke='#5BA3D9' stroke-width='1.40625' stroke-linecap='round' stroke-linejoin='round' stroke-dasharray='3 2'/></svg>`,
+            2: `<svg xmlns='http://www.w3.org/2000/svg' width='23' height='22' viewBox='0 0 23 22' fill='none'><path d='M11.5 12.6875C15.5386 12.6875 18.8125 11.1765 18.8125 9.3125C18.8125 7.44854 15.5386 5.9375 11.5 5.9375C7.46142 5.9375 4.1875 7.44854 4.1875 9.3125C4.1875 11.1765 7.46142 12.6875 11.5 12.6875Z' stroke='#EE1C25' stroke-width='1.40625' stroke-linecap='round' stroke-linejoin='round'/><path d='M4.1875 9.3125V12.6875C4.1875 14.375 7 16.0625 11.5 16.0625C16 16.0625 18.8125 14.375 18.8125 12.6875V9.3125' stroke='#EE1C25' stroke-width='1.40625' stroke-linecap='round' stroke-linejoin='round'/></svg>`,
+            3: `<svg xmlns='http://www.w3.org/2000/svg' width='23' height='22' viewBox='0 0 23 22' fill='none'><path d='M8.75 10.3125C12.547 10.3125 15.625 8.92738 15.625 7.21875C15.625 5.51012 12.547 4.125 8.75 4.125C4.95304 4.125 1.875 5.51012 1.875 7.21875C1.875 8.92738 4.95304 10.3125 8.75 10.3125Z' stroke='#F5C70B' stroke-width='1.375' stroke-linecap='round' stroke-linejoin='round'/><path d='M1.875 7.21875V10.6562C1.875 12.3664 4.95156 13.75 8.75 13.75C12.5484 13.75 15.625 12.3664 15.625 10.6562V7.21875' stroke='#F5C70B' stroke-width='1.375' stroke-linecap='round' stroke-linejoin='round'/><path d='M15.625 8.31006C18.7617 8.60225 21.125 9.84834 21.125 11.3437C21.125 13.0538 18.0484 14.4374 14.25 14.4374C12.5656 14.4374 11.0187 14.1624 9.82422 13.7155' stroke='#F5C70B' stroke-width='1.375' stroke-linecap='round' stroke-linejoin='round'/><path d='M7.375 13.6898V14.7812C7.375 16.4914 10.4516 17.875 14.25 17.875C18.0484 17.875 21.125 16.4914 21.125 14.7812V11.3438' stroke='#F5C70B' stroke-width='1.375' stroke-linecap='round' stroke-linejoin='round'/></svg>`,
+            4: `<svg xmlns='http://www.w3.org/2000/svg' width='29' height='22' viewBox='0 0 29 22' fill='none'><path d='M15.6192 10.1361C19.3267 10.1361 22.3322 8.78368 22.3322 7.11532C22.3322 5.44696 19.3267 4.09448 15.6192 4.09448C11.9117 4.09448 8.90625 5.44696 8.90625 7.11532C8.90625 8.78368 11.9117 10.1361 15.6192 10.1361Z' stroke='#A1B925' stroke-width='1.34259' stroke-linecap='round' stroke-linejoin='round'/><path d='M8.90625 7.11523V10.4717C8.90625 12.1416 11.9103 13.4925 15.6192 13.4925C19.3281 13.4925 22.3322 12.1416 22.3322 10.4717V7.11523' stroke='#A1B925' stroke-width='1.34259' stroke-linecap='round' stroke-linejoin='round'/><path d='M22.7285 8.56616C25.7913 8.85146 28.0989 10.0682 28.0989 11.5283C28.0989 13.1981 25.0948 14.5491 21.3859 14.5491C19.7412 14.5491 18.2308 14.2806 17.0645 13.8442' stroke='#A1B925' stroke-width='1.34259' stroke-linecap='round' stroke-linejoin='round'/><path d='M14.6738 13.8191V14.8848C14.6738 16.5547 17.6779 17.9056 21.3868 17.9056C25.0957 17.9056 28.0998 16.5547 28.0998 14.8848V11.5283' stroke='#A1B925' stroke-width='1.34259' stroke-linecap='round' stroke-linejoin='round'/><path d='M8.10163 8.39087C4.39417 8.39087 1.38867 9.74334 1.38867 11.4117C1.38867 13.0801 4.39417 14.4325 8.10163 14.4325C10.126 14.4325 11.9411 14.0293 13.1718 13.3916' stroke='#A1B925' stroke-width='1.34259' stroke-linecap='round' stroke-linejoin='round'/><path d='M1.38867 11.4116V14.7681C1.38867 16.438 4.39272 17.7889 8.10164 17.7889C11.8105 17.7889 14.6731 16.5036 14.6731 14.8338' stroke='#A1B925' stroke-width='1.34259' stroke-linecap='round' stroke-linejoin='round'/></svg>`
+        };
+
+        async function loadData() {
+            const response = await fetch('/api/currency/current');
+            allData = await response.json();
+            renderAll();
+        }
+
+        function renderAll() {
+            departments.forEach(dept => {
+                const container = document.getElementById('currencies-' + dept.Id);
+                if (!container) return;
+
+                const deptData = allData.filter(r => r.departmentId === dept.Id);
+
+                if (deptData.length === 0) {
+                    container.innerHTML = '<span style="font-size:13px; color:#888;">Нет данных</span>';
+                    return;
+                }
+
+                let html = '';
+                deptData.forEach(r => {
+                    if (currentCurrency !== 'ALL' && r.currency !== currentCurrency) return;
+                    const coin = coinSvg[r.amount] || coinSvg[1];
+                    html += `<div class="currency-item">
+                        <span class="currency-code">${r.currency}</span>
+                        ${coin}
+                    </div>`;
+                });
+
+                container.innerHTML = html || '<span style="font-size:13px; color:#888;">Нет данных</span>';
+            });
+
+            applyFilters();
+        }
+
+        function applyFilters() {
+            document.querySelectorAll('.dept-card').forEach(card => {
+                const city = card.dataset.city;
+                const cityMatch = currentCity === 'ALL' || city === currentCity;
+                card.classList.toggle('hidden', !cityMatch);
+            });
+        }
+
+        function filterCurrency(currency) {
+            currentCurrency = currency;
+            document.querySelectorAll('.currency-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderAll();
+        }
+
+        function filterCity(city) {
+            currentCity = city;
+            applyFilters();
+        }
+
+                function filterSearch(query) {
+            const q = query.toLowerCase();
+            document.querySelectorAll('.dept-card').forEach(card => {
+                const caption = card.dataset.caption?.toLowerCase() || '';
+                const address = card.querySelector('.dept-address')?.textContent.toLowerCase() || '';
+                const match = caption.includes(q) || address.includes(q);
+                card.classList.toggle('hidden', !match);
+            });
+        }
+
+                let activeCard = null;
+        let activeDeptId = null;
+        let activeCurrencyAnalytics = null;
+
+        function toggleAnalytics(card) {
+            const panel = document.getElementById('analyticsPanel');
+
+            if (activeCard === card) {
+                card.classList.remove('selected');
+                panel.classList.remove('visible');
+                activeCard = null;
+                activeDeptId = null;
+                return;
+            }
+
+            if (activeCard) activeCard.classList.remove('selected');
+            activeCard = card;
+            card.classList.add('selected');
+
+            activeDeptId = parseInt(card.dataset.id);
+            const caption = card.dataset.caption;
+
+            const deptData = allData.filter(r => r.departmentId === activeDeptId);
+            const currencies = [...new Set(deptData.map(r => r.currency))];
+            activeCurrencyAnalytics = currencies[0] || 'USD';
+
+            panel.classList.add('visible');
+            renderAnalyticsPanel(caption, currencies);
+            loadAnalytics('day');
+        }
+
+        function renderAnalyticsPanel(caption, currencies) {
+            const content = document.getElementById('analyticsContent');
+                    const currencyButtons = ['ALL', ...currencies].map(c =>
+            `<button class="currency-btn ${c === activeCurrencyAnalytics ? 'active' : ''}"
+                onclick="selectAnalyticsCurrency('${c}')">${c === 'ALL' ? 'Все' : c}</button>`
+        ).join('');
+
+            content.innerHTML = `
+                <h3 style="font-size:15px; font-weight:600; margin-bottom:4px;">${caption}</h3>
+                <p style="font-size:12px; color:#888; margin-bottom:16px;">История изменений уровня валюты</p>
+
+                <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
+                    ${currencyButtons}
+                </div>
+
+                <div style="display:flex; gap:8px; margin-bottom:20px;">
+                    <button class="currency-btn active" id="period-day" onclick="selectPeriod('day')">День</button>
+                    <button class="currency-btn" id="period-week" onclick="selectPeriod('week')">Неделя</button>
+                    <button class="currency-btn" id="period-month" onclick="selectPeriod('month')">Месяц</button>
+                </div>
+
+                        <div style="height:280px; position:relative;">
+            <canvas id="analyticsChart"></canvas>
+        </div>
+                <p id="noDataMsg" style="display:none; color:#888; font-size:13px; text-align:center; margin-top:40px;">Нет данных за выбранный период</p>
+            `;
+        }
+
+        function selectAnalyticsCurrency(currency) {
+            activeCurrencyAnalytics = currency;
+            document.querySelectorAll('#analyticsContent .currency-btn').forEach(btn => {
+                if (['День','Неделя','Месяц'].includes(btn.textContent)) return;
+                btn.classList.toggle('active', btn.textContent === currency);
+            });
+            loadAnalytics(currentPeriod);
+        }
+
+        let currentPeriod = 'day';
+        let chart = null;
+
+        function selectPeriod(period) {
+            currentPeriod = period;
+            document.querySelectorAll('#analyticsContent .currency-btn').forEach(btn => {
+                if (['День','Неделя','Месяц'].includes(btn.textContent)) {
+                    btn.classList.toggle('active',
+                        (btn.textContent === 'День' && period === 'day') ||
+                        (btn.textContent === 'Неделя' && period === 'week') ||
+                        (btn.textContent === 'Месяц' && period === 'month')
+                    );
+                }
+            });
+            loadAnalytics(period);
+        }
+
+                async function loadAnalytics(period) {
+            if (!activeDeptId || !activeCurrencyAnalytics) return;
+
+            const canvas = document.getElementById('analyticsChart');
+            const noDataMsg = document.getElementById('noDataMsg');
+            if (chart) chart.destroy();
+
+            const lineColors = { BYN: '#1D9E75', USD: '#5BA3D9', EUR: '#A1B925', RUB: '#EE1C25', CNY: '#F5C70B' };
+
+            if (activeCurrencyAnalytics === 'ALL') {
+                const deptData = allData.filter(r => r.departmentId === activeDeptId);
+                const currencies = [...new Set(deptData.map(r => r.currency))];
+
+                const datasets = await Promise.all(currencies.map(async c => {
+                    const res = await fetch(`/api/currency/history?departmentId=${activeDeptId}&currency=${c}&period=${period}`);
+                    const data = await res.json();
+                    return { currency: c, data };
+                }));
+
+                const allEmpty = datasets.every(d => d.data.length === 0);
+                if (allEmpty) {
+                    canvas.style.display = 'none';
+                    noDataMsg.style.display = 'block';
+                    return;
+                }
+
+                canvas.style.display = 'block';
+                noDataMsg.style.display = 'none';
+
+                const labels = datasets.find(d => d.data.length > 0).data.map(r =>
+                    new Date(r.checkedAt).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
+                );
+
+                chart = new Chart(canvas, {
+                    type: 'line',
+                    data: {
+                        labels,
+                        datasets: datasets.filter(d => d.data.length > 0).map(d => ({
+                            label: d.currency,
+                            data: d.data.map(r => r.amount),
+                            borderColor: lineColors[d.currency] || '#888',
+                            backgroundColor: (lineColors[d.currency] || '#888') + '1A',
+                            borderWidth: 2,
+                            pointRadius: 2,
+                            tension: 0.3
+                        }))
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                                    y: {
+            ticks: {
+                stepSize: 1,
+                font: { size: 11 },
+                callback: function(value) {
+                    const labels = { 1: 'Нет', 2: 'Мало', 3: 'Достаточно', 4: 'Много' };
+                    return labels[value] !== undefined ? labels[value] : null;
+                }
+            },
+            min: 1,
+            max: 4,
+            grid: { color: '#f0f0f0' }
+        },
+                            x: { ticks: { maxTicksLimit: 6 } }
+                        },
+                        plugins: { legend: { display: true } }
+                    }
+                });
+            } else {
+                const response = await fetch(`/api/currency/history?departmentId=${activeDeptId}&currency=${activeCurrencyAnalytics}&period=${period}`);
+                const data = await response.json();
+
+                if (!data || data.length === 0) {
+                    canvas.style.display = 'none';
+                    noDataMsg.style.display = 'block';
+                    return;
+                }
+
+                canvas.style.display = 'block';
+                noDataMsg.style.display = 'none';
+
+                const labels = data.map(r => new Date(r.checkedAt).toLocaleString('ru-RU', {
+                    day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'
+                }));
+
+                chart = new Chart(canvas, {
+                    type: 'line',
+                    data: {
+                        labels,
+                        datasets: [{
+                            label: activeCurrencyAnalytics,
+                            data: data.map(r => r.amount),
+                            borderColor: lineColors[activeCurrencyAnalytics] || '#1D9E75',
+                            backgroundColor: lineColors[activeCurrencyAnalytics] + '1A',
+                            borderWidth: 2,
+                            pointRadius: 2,
+                            tension: 0.3,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                                   y: {
+            ticks: {
+                stepSize: 1,
+                font: { size: 11 },
+                callback: function(value) {
+                    const labels = { 1: 'Нет', 2: 'Мало', 3: 'Достаточно', 4: 'Много' };
+                    return labels[value] !== undefined ? labels[value] : null;
+                }
+            },
+            min: 1,
+            max: 4,
+            grid: { color: '#f0f0f0' }
+        },
+                            x: { ticks: { maxTicksLimit: 6 } }
+                        },
+                        plugins: { legend: { display: false } }
+                    }
+                });
+            }
+        }
+
+        loadData();
+    </script>
+}

@@ -1,0 +1,38 @@
+[
+  {
+    "ContainingType": "CurrencyMonitor.Web.Controllers.CurrencyController",
+    "Method": "GetCurrent",
+    "RelativePath": "api/Currency/current",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CurrencyMonitor.Web.Controllers.CurrencyController",
+    "Method": "GetHistory",
+    "RelativePath": "api/Currency/history",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "departmentId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "currency",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "period",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

@@ -1,0 +1,239 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f5f5f5;
+    color: #1a1a1a;
+}
+
+/* Шапка */
+.navbar {
+    background: white;
+    border-bottom: 1px solid #e8e8e8;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.navbar-time {
+    font-size: 12px;
+    color: #888;
+}
+
+/* Фильтры */
+.filters {
+    background: white;
+    border-bottom: 1px solid #e8e8e8;
+    padding: 14px 24px;
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.filter-label {
+    font-size: 11px;
+    color: #888;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.currency-btn {
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    font-size: 13px;
+    cursor: pointer;
+    background: white;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.15s;
+}
+
+    .currency-btn:hover {
+        border-color: #1D9E75;
+        color: #1D9E75;
+    }
+
+    .currency-btn.active {
+        background: #1D9E75;
+        border-color: #1D9E75;
+        color: white;
+    }
+
+.city-select {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-size: 13px;
+    background: white;
+    color: #1a1a1a;
+    cursor: pointer;
+}
+
+.search-bar {
+    background: white;
+    border-bottom: 1px solid #e8e8e8;
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+    .search-bar i {
+        color: #888;
+        font-size: 16px;
+    }
+
+    .search-bar input {
+        border: none;
+        outline: none;
+        font-size: 14px;
+        color: #1a1a1a;
+        width: 100%;
+        background: transparent;
+    }
+
+        .search-bar input::placeholder {
+            color: #bbb;
+        }
+
+/* Легенда */
+.legend {
+    background: white;
+    border-bottom: 1px solid #e8e8e8;
+    padding: 10px 24px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.legend-label {
+    font-size: 12px;
+    color: #888;
+    font-weight: 600;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #555;
+}
+
+/* Список отделений */
+.layout {
+    display: flex;
+    gap: 0;
+    height: calc(100vh - 120px);
+}
+
+.content {
+    padding: 16px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 50%;
+    overflow-y: auto;
+}
+
+.analytics-panel {
+    width: 50%;
+    border-left: 1px solid #e8e8e8;
+    padding: 24px;
+    background: white;
+    position: sticky;
+    top: 0;
+    height: calc(100vh - 120px);
+    overflow-y: auto;
+    display: none;
+}
+
+#analyticsChart {
+    max-height: 220px !important;
+}
+
+.analytics-panel.visible {
+    display: block;
+}
+
+.dept-card {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e8e8e8;
+    padding: 16px 20px;
+}
+
+    .dept-card.hidden {
+        display: none;
+    }
+
+.dept-caption {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 2px;
+}
+
+.dept-address {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1D9E75;
+    margin-bottom: 12px;
+}
+
+.currencies {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.currency-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid #e8e8e8;
+    background: #f9f9f9;
+}
+
+.currency-code {
+    font-size: 13px;
+    font-weight: 500;
+    color: #1a1a1a;
+}
+
+.dept-card {
+    cursor: pointer;
+    transition: border-color 0.15s;
+}
+
+    .dept-card.selected {
+        border-color: #1D9E75;
+        box-shadow: 0 0 0 2px rgba(29, 158, 117, 0.15);
+    }
