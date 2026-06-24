@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="../CurrencyMonitor.Web/CurrencyMonitor.Web.csproj" Id="1ec8017d-d77b-48f2-912f-4de82e0f6135" />
+  <Project Path="CurrencyMonitor.Api.csproj" />
+</Solution>
